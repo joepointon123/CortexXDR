@@ -1,0 +1,10 @@
+/*
+Date: 02/06/2023
+Description: - Looks for the execution of the Human2.aspx webshell binaries identified as IOC's in the MOVEit transfer vulnerability by Progress Community
+Author: Joseph Pointon
+Ref: https://community.progress.com/s/article/MOVEit-Transfer-Critical-Vulnerability-31May2023?utm_medium=email&utm_source=eloqua&elqTrackId=8fb5ca12495f444f8edd44fd2dccb5a8&elq=32a68db8e7f64ee4b43c39dd90b972e6&elqaid=31439&elqat=1&elqCampaignId=38129 
+*/
+
+dataset = xdr_data 
+| filter event_type = ENUM.PROCESS AND event_sub_type = ENUM.PROCESS_START
+| filter action_file_sha256 in ("0b3220b11698b1436d1d866ac07cc90018e59884e91a8cb71ef8924309f1e0e9", "110e301d3b5019177728010202c8096824829c0b11bb0dc0bff55547ead18286", "1826268249e1ea58275328102a5a8d158d36b4fd312009e4a2526f0bfbc30de2", "2ccf7e42afd3f6bf845865c74b2e01e2046e541bb633d037b05bd1cdb296fa59", "58ccfb603cdc4d305fddd52b84ad3f58ff554f1af4d7ef164007cb8438976166", "98a30c7251cf622bd4abce92ab527c3f233b817a57519c2dd2bf8e3d3ccb7db8", "a8f6c1ccba662a908ef7b0cb3cc59c2d1c9e2cbbe1866937da81c4c616e68986", "b5ef11d04604c9145e4fe1bedaeb52f2c2345703d52115a5bf11ea56d7fb6b03", "cec425b3383890b63f5022054c396f6d510fae436041add935cd6ce42033f621", "ed0c3e75b7ac2587a5892ca951707b4e0dd9c8b18aaf8590c24720d73aa6b90c", "0b3220b11698b1436d1d866ac07cc90018e59884e91a8cb71ef8924309f1e0e9", "110e301d3b5019177728010202c8096824829c0b11bb0dc0bff55547ead18286", "1826268249e1ea58275328102a5a8d158d36b4fd312009e4a2526f0bfbc30de2", "2ccf7e42afd3f6bf845865c74b2e01e2046e541bb633d037b05bd1cdb296fa59", "58ccfb603cdc4d305fddd52b84ad3f58ff554f1af4d7ef164007cb8438976166", "98a30c7251cf622bd4abce92ab527c3f233b817a57519c2dd2bf8e3d3ccb7db8", "a8f6c1ccba662a908ef7b0cb3cc59c2d1c9e2cbbe1866937da81c4c616e68986", "b5ef11d04604c9145e4fe1bedaeb52f2c2345703d52115a5bf11ea56d7fb6b03", "cec425b3383890b63f5022054c396f6d510fae436041add935cd6ce42033f621", "ed0c3e75b7ac2587a5892ca951707b4e0dd9c8b18aaf8590c24720d73aa6b90c")
