@@ -1,0 +1,16 @@
+/*
+Date: 28th March 2023
+Rule Name: App Consent Given by Non-Admin
+Description:  will alert when the "Consent to application" operation occurs by a user that is not an admin account.  This could indicate that permissions to access the listed Azure App were provided by a malicious actor or at the very least someone who isnt authorised.
+Alert Level: Medium
+Mitre Att&ck Tactic: Persistance, Priviledge Escalation
+*/
+
+dataset = msft_azure_ad_audit_raw
+| filter activityDisplayName in ("Consent to application")
+| alter TargetResourceArray = json_extract_array(targetResources, "$.")//extracting from target resources
+| alter TargetApp = arrayindex(TargetResourceArray , 0 )//extracting result from 0 element TargetResourceArray
+| alter  UserPrincipalName = json_extract(initiatedBy, "$.user.userPrincipalName"), IP = json_extract(initiatedBy, "$.user.ipAddress")
+| alter App = json_extract(TargetApp, "$.displayName" )
+| filter UserPrincipalName not contains "" //enter admin account/s
+| fields _time, UserPrincipalName, IP , App , category , initiatedBy , targetResources , TargetResourceArray , TargetApp 
