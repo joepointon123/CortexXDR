@@ -1,0 +1,29 @@
+/*
+Date: 13th June 2023
+Rule Name: Bulk Changes to Privileged Account Permissions
+Description:  Identifies when changes to multiple users permissions are changed at once. Investigate immediately if not a planned change. This setting could enable an attacker access to Azure subscriptions in the environment..
+Alert Level: Medium
+Mitre Att&ck Tactic: Persistance, Priviledge Escalation
+*/
+
+dataset = msft_azure_ad_audit_raw
+| filter category ~= "RoleManagement"
+| filter activityDisplayName in ("Add eligible member to role", "Add member to role")//looking for role assignemts
+| alter TargetResourceArray = json_extract_array(targetResources, "$.")//extracting from target resources
+| alter TargetResource = arrayindex(TargetResourceArray , 0 )
+| alter  Username = json_extract(TargetResource, "$.userPrincipalName" ), Role_Assigned = json_extract(TargetResource, "$.modifiedProperties[3].newValue")
+| fields _time, Username , Role_Assigned , category , initiatedBy , targetResources , TargetResourceArray , TargetResource 
+| comp count(Role_Assigned ) as Counter by Username//counting the ammount of role assignments there are
+//the join is adding the results of the search without the count to give the full logs
+| join type = inner (
+        dataset = msft_azure_ad_audit_raw
+        | filter category ~= "RoleManagement"
+        | filter activityDisplayName in ("Add eligible member to role", "Add member to role")
+        | alter TargetResourceArray = json_extract_array(targetResources, "$.")
+        | alter TargetResource = arrayindex(TargetResourceArray , 0 )
+        | alter  Username = json_extract(TargetResource, "$.userPrincipalName" ), Role_Assigned = json_extract(TargetResource, "$.modifiedProperties[3].newValue")
+        | fields _time, Username , Role_Assigned , category , initiatedBy , targetResources , TargetResourceArray , TargetResource 
+        ) as result Username = result.Username 
+| filter Counter >= 9//looks for 9 or more role assignmets in the time period
+| dedup Username by desc _time //filtering duplicate events by username
+| fields _time, Username, Counter, category , _product as LogSource, initiatedBy, targetResources , TargetResource
