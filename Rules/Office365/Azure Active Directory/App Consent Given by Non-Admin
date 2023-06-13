@@ -1,7 +1,7 @@
 /*
 Date: 28th March 2023
 Rule Name: App Consent Given by Non-Admin
-Description:  will alert when the "Consent to application" operation occurs by a user that is not an admin account.  This could indicate that permissions to access the listed Azure App were provided by a malicious actor or at the very least someone who isnt authorised.
+Description:  Will alert when the "Consent to application" operation occurs by a user that is not an admin account.  This could indicate that permissions to access the listed Azure App were provided by a malicious actor or at the very least someone who isnt authorised.
 Alert Level: Medium
 Mitre Att&ck Tactic: Persistance, Priviledge Escalation
 */
