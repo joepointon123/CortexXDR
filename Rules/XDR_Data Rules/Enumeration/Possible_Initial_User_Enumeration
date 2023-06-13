@@ -1,1 +1,13 @@
+/*
+Date: 13/06/2023
+Description: - Detects commands run on widows machines that can be used for the enumeration of user accounts on a device. This could indicate an actor is present on a device and gathering information about the users and their permissions.
+Author: Joseph Pointon
+Disclaimer: These commands can also be run by sysadmins and other memebers of insfrastructure/support teams so its worth knowing who should and shouldnt be running these commands during investigation
+Mitre Tactics: Prsistance, Priviledge Escalation
+Alert Level: Low
+*/
 
+config case_sensitive = false
+| dataset = xdr_data 
+| filter actor_process_command_line in ("query user" , "echo %USERNAME%", "net user", "Get-LocalUser")
+| fields _time, agent_hostname , agent_ip_addresses , actor_effective_username, actor_process_image_name, actor_process_image_path, actor_process_command_line, actor_process_signature_vendor, actor_process_signature_status , causality_actor_process_image_name, causality_actor_process_image_path , causality_actor_process_command_line , causality_actor_process_signature_vendor , causality_actor_process_signature_status 
