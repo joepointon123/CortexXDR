@@ -1,1 +1,18 @@
+/*
+Date: 13th June 2023
+Rule Name: Explicit MFA Denied
+Description:  Look for applications that have been granted (Delegated or App/Role) permissions to Read Mail (Permissions field has Mail.Read) and subsequently has been consented to. This can help identify applications that have been abused to gain access to mailboxes.
+Alert Level: Medium
+Mitre Att&ck Tactic: Persistance
+*/
+
+dataset = msft_azure_ad_audit_raw 
+| filter category ~= "ApplicationManagement"
+| filter targetResources contains "Permissions"
+| alter TargetArray = json_extract_array(targetResources, "$.")//extracting from target resources
+| alter TargetApp = arrayindex(TargetArray , 0 )
+| alter ConsentPermissions = json_extract(TargetApp, "$.modifiedProperties[4].newValue")
+| filter ConsentPermissions in ("Mail.Read", "Mail.ReadWrite")
+| alter InitiatingUser = json_extract(initiatedBy , "$.user.userPrincipalName")
+| fields _time, _insert_time , category , _product , activityDisplayName ,  InitiatingUser, initiatedBy , result, ConsentPermissions , operationType , _collector_name , loggedByService , targetResources , additionalDetails
 
