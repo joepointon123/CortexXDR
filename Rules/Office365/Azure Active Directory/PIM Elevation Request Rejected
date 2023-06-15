@@ -1,0 +1,18 @@
+/*
+Date: 29th March 2023
+Author: Joe Pointon
+Rule Name: PIM Elevation Request Rejected
+Description:  Identifies when a user is rejected for a privileged role elevation via PIM. Monitor rejections for indicators of attacker compromise of the requesting account.
+Alert Level: High
+Mitre Att&ck Tactic: Credential Access
+*/
+
+dataset = msft_azure_ad_audit_raw
+| filter resultReason contains "test"
+| filter category ~= "RoleManagement"
+| filter activityDisplayName in ("Add member to role request denied (PIM activation)") //looking for role assignemts
+| alter TargetArray = json_extract_array(targetResources, "$.") //extracting from target resources
+| alter TargetApp = arrayindex(TargetArray , 0 )
+| alter UserInitiatedBy = json_extract(initiatedBy , "$.user.userPrincipalName")
+| alter  Username = json_extract(TargetApp, "$.userPrincipalName" ), Role_Assigned = json_extract(TargetApp, "$.modifiedProperties[3].newValue")
+| fields _time, activityDateTime , ID, Username, UserInitiatedBy , activityDisplayName , category, result, resultReason , operationType , loggedByService , initiatedBy , targetResources , TargetArray , TargetApp  
