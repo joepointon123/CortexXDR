@@ -1,0 +1,19 @@
+/*
+Date: 13th June 2023
+Rule Name: Mail Permissions Granted to Application
+Description:  Looks for a user failing to login to Azure services 10 or more times within an X minute time period. This could be indicative of a Brute Force of Password Spray attack on a Service or User Account
+Alert Level: Medium
+Author: Joe Pointon
+Mitre Att&ck Tactic: Credential Access
+*/
+
+dataset = msft_azure_ad_raw 
+| filter errorcode = 50126
+| comp count(errorcode) as Counter by userPrincipalName
+| join type = inner 
+        (dataset = msft_azure_ad_raw
+        | fields  _time, EventTime, userDisplayName , userPrincipalName  , Info, Details, _product as Product, DeviceName, OS, Browser , Country , State , City,  IsManaged , IsCompliant)
+        as Full_logs userPrincipalName = full_logs.userPrincipalName
+| filter Counter >= 10
+| dedup userPrincipalName by desc _time
+| fields _time, userPrincipalName , userDisplayName , Counter , DeviceName , os, Browser, Country , state, City, details, info, IsManaged , IsCompliant 
