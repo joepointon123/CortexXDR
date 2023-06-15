@@ -1,6 +1,6 @@
 /*
 Date: 13th June 2023
-Rule Name: Explicit MFA Denied
+Rule Name: Mail Permissions Granted to Application
 Description:  Look for applications that have been granted (Delegated or App/Role) permissions to Read Mail (Permissions field has Mail.Read) and subsequently has been consented to. This can help identify applications that have been abused to gain access to mailboxes.
 Alert Level: Medium
 Mitre Att&ck Tactic: Persistance
