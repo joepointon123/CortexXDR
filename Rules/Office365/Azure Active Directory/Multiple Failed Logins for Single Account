@@ -1,9 +1,9 @@
 /*
-Date: 13th June 2023
+Date: 3rd April 2023
+Author: Joe Pointon
 Rule Name: Mail Permissions Granted to Application
 Description:  Looks for a user failing to login to Azure services 10 or more times within an X minute time period. This could be indicative of a Brute Force of Password Spray attack on a Service or User Account
 Alert Level: Medium
-Author: Joe Pointon
 Mitre Att&ck Tactic: Credential Access
 */
 
