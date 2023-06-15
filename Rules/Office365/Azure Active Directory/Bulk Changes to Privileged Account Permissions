@@ -1,7 +1,8 @@
 /*
-Date:18th May 2023
+Date: 18th May 2023
+Author: Joe Pointon
 Rule Name: Bulk Changes to Privileged Account Permissions
-Description:  Identifies when changes to multiple users permissions are changed at once. Investigate immediately if not a planned change. This setting could enable an attacker access to Azure subscriptions in the environment..
+Description: Identifies when changes to multiple users permissions are changed at once. Investigate immediately if not a planned change. This setting could enable an attacker access to Azure subscriptions in the environment..
 Alert Level: Medium
 Mitre Att&ck Tactic: Persistance, Priviledge Escalation
 */
