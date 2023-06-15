@@ -1,1 +1,12 @@
+/*
+Date: 13th June 2023
+Rule Name: Explicit MFA Denied
+Description:  Identifies when a user declines or reports an MFA push
+Alert Level: Medium
+Mitre Att&ck Tactic: Credential Access
+*/
 
+dataset = msft_azure_ad_raw
+| filter status contains "500121"
+| filter status contains "MFA Denied; user declined the authentication" or status contains "MFA denied; Phone App Reported Fraud"
+| fields  _time, status,  userDisplayName , userAgent, location, ipAddress , riskState , appDisplayName , userDisplayName , userAgent 
