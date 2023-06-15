@@ -1,5 +1,6 @@
 /*
-Date: 13th June 2023
+Date: 13th May 2023
+Author: Joe Pointon
 Rule Name: Explicit MFA Denied
 Description:  Identifies when a user declines or reports an MFA push
 Alert Level: Medium
